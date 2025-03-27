@@ -146,11 +146,11 @@
                     android:gravity="center"
                     android:padding="16dp">
 
-<!--                    <ImageView-->
-<!--                        android:layout_width="64dp"-->
-<!--                        android:layout_height="64dp"-->
-<!--                        android:src="@drawable/ic_add_expense"-->
-<!--                        android:layout_marginBottom="8dp"/>-->
+                    <ImageView
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:src="@drawable/ic_add_expense"
+                        android:layout_marginBottom="8dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -175,11 +175,11 @@
                     android:gravity="center"
                     android:padding="16dp">
 
-<!--                    <ImageView-->
-<!--                        android:layout_width="64dp"-->
-<!--                        android:layout_height="64dp"-->
-<!--                        android:src="@drawable/ic_expense_list"-->
-<!--                        android:layout_marginBottom="8dp"/>-->
+                    <ImageView
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:src="@drawable/ic_expense_list"
+                        android:layout_marginBottom="8dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -204,11 +204,11 @@
                     android:gravity="center"
                     android:padding="16dp">
 
-<!--                    <ImageView-->
-<!--                        android:layout_width="64dp"-->
-<!--                        android:layout_height="64dp"-->
-<!--                        android:src="@drawable/ic_reports"-->
-<!--                        android:layout_marginBottom="8dp"/>-->
+                    <ImageView
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:src="@drawable/ic_reports"
+                        android:layout_marginBottom="8dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -233,11 +233,11 @@
                     android:gravity="center"
                     android:padding="16dp">
 
-<!--                    <ImageView-->
-<!--                        android:layout_width="64dp"-->
-<!--                        android:layout_height="64dp"-->
-<!--                        android:src="@drawable/ic_settings"-->
-<!--                        android:layout_marginBottom="8dp"/>-->
+                    <ImageView
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:src="@drawable/ic_settings"
+                        android:layout_marginBottom="8dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"

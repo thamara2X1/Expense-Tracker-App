@@ -12,7 +12,7 @@ import com.example.expensetracker.User;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "ExpenseTrackerDB";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // User Table
     private static final String TABLE_USERS = "users";
@@ -29,6 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_CATEGORY = "category";
     private static final String COLUMN_DESCRIPTION = "description";
     private static final String COLUMN_TIMESTAMP = "timestamp";
+    private static final String COLUMN_DATE = "date";
 
     // Create table statements
     private static final String CREATE_USERS_TABLE =
@@ -46,6 +47,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     + COLUMN_CATEGORY + " TEXT, "
                     + COLUMN_DESCRIPTION + " TEXT, "
                     + COLUMN_TIMESTAMP + " INTEGER, "
+                    + COLUMN_DATE + " INTEGER, "
                     + "FOREIGN KEY(" + COLUMN_EXPENSE_USER_ID + ") REFERENCES "
                     + TABLE_USERS + "(" + COLUMN_USER_ID + "))";
 
@@ -78,7 +80,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_PASSWORD, user.getPassword());
 
         // Insert row
-        return db.insert(TABLE_USERS, null, values);
+        long result = db.insert(TABLE_USERS, null, values);
+        db.close();
+        return result;
     }
 
     // Method to get user by email
@@ -102,6 +106,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return user;
         }
         return null;
+    }
+
+    // Method to add an expense
+    public long addExpense(Expense expense) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_EXPENSE_USER_ID, expense.getUserId());
+        values.put(COLUMN_AMOUNT, expense.getAmount());
+        values.put(COLUMN_CATEGORY, expense.getCategory());
+        values.put(COLUMN_DESCRIPTION, expense.getDescription());
+        values.put(COLUMN_TIMESTAMP, System.currentTimeMillis());
+        values.put(COLUMN_DATE, expense.getDate());
+
+        long result = db.insert(TABLE_EXPENSES, null, values);
+        db.close();
+        return result;
     }
 
     // Method to get all expenses for a specific user
@@ -133,14 +153,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // Iterate through all rows and create Expense objects
         while (cursor.moveToNext()) {
-            int id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_EXPENSE_ID));
-            int expenseUserId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_EXPENSE_USER_ID));
-            double amount = cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_AMOUNT));
-            String category = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CATEGORY));
-            String description = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION));
-            long timestamp = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_TIMESTAMP));
-
-            Expense expense = new Expense(id, expenseUserId, amount, category, description, timestamp);
+            Expense expense = new Expense(
+                    cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_EXPENSE_ID)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_EXPENSE_USER_ID)),
+                    cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_AMOUNT)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CATEGORY)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION)),
+                    cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_TIMESTAMP)) // Get timestamp as long
+            );
             expenses.add(expense);
         }
 
