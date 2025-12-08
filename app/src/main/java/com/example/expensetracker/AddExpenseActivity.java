@@ -2,27 +2,50 @@ package com.example.expensetracker;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
 public class AddExpenseActivity extends AppCompatActivity {
     private EditText editTextAmount, editTextDescription, editTextDate;
-    private RadioGroup radioGroupTransactionType;
-    private RadioButton radioButtonExpense, radioButtonIncome;
-    private Button buttonSave;
-
+    private Spinner spinnerCategory;
+    private RadioGroup radioGroupType;
+    private RadioButton radioIncome, radioExpense;
+    private Button buttonSave, buttonCancel;
+    private ImageButton buttonBack;
     private DatabaseHelper databaseHelper;
     private int currentUserId;
+
+    // Categories
+    private String[] expenseCategories = {
+            "Food & Dining",
+            "Transportation",
+            "Shopping",
+            "Entertainment",
+            "Bills & Utilities",
+            "Healthcare",
+            "Education",
+            "Travel",
+            "Other"
+    };
+
+    private String[] incomeCategories = {
+            "Salary",
+            "Business",
+            "Investment",
+            "Gift",
+            "Other"
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +53,7 @@ public class AddExpenseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_expense);
 
         // Get User ID from Intent
-        currentUserId = getIntent().getIntExtra("USER_ID", -1);
-        if (currentUserId == -1) {
-            Toast.makeText(this, "User ID not found", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
+        currentUserId = getIntent().getIntExtra("USER_ID", 1);
 
         // Initialize DatabaseHelper
         databaseHelper = new DatabaseHelper(this);
@@ -43,103 +61,140 @@ public class AddExpenseActivity extends AppCompatActivity {
         // Initialize Views
         initializeViews();
 
-        // Setup Save Button Listener
-        setupSaveButtonListener();
+        // Set current date
+        setCurrentDate();
+
+        // Setup category spinner with default expense categories
+        setupCategorySpinner(expenseCategories);
+
+        // Setup listeners
+        setupListeners();
     }
 
     private void initializeViews() {
         editTextAmount = findViewById(R.id.edit_text_amount);
         editTextDescription = findViewById(R.id.edit_text_description);
         editTextDate = findViewById(R.id.edit_text_date);
-
-        radioGroupTransactionType = findViewById(R.id.radio_group_transaction_type);
-        radioButtonExpense = findViewById(R.id.radio_button_expense);
-        radioButtonIncome = findViewById(R.id.radio_button_income);
-
+        spinnerCategory = findViewById(R.id.spinner_category);
+        radioGroupType = findViewById(R.id.radio_group_type);
+        radioIncome = findViewById(R.id.radio_income);
+        radioExpense = findViewById(R.id.radio_expense);
         buttonSave = findViewById(R.id.button_save);
-
-        // Set default date to current date
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        editTextDate.setText(dateFormat.format(new Date()));
+        buttonCancel = findViewById(R.id.button_cancel);
+        buttonBack = findViewById(R.id.button_back);
     }
 
-    private void setupSaveButtonListener() {
-        buttonSave.setOnClickListener(v -> {
-            if (validateInput()) {
+    private void setCurrentDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        editTextDate.setText(sdf.format(new Date()));
+    }
+
+    private void setupCategorySpinner(String[] categories) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                categories
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCategory.setAdapter(adapter);
+    }
+
+    private void setupListeners() {
+        // Back button
+        buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        // Radio group listener to change categories
+        radioGroupType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == R.id.radio_income) {
+                    setupCategorySpinner(incomeCategories);
+                } else {
+                    setupCategorySpinner(expenseCategories);
+                }
+            }
+        });
+
+        // Save button
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 saveExpense();
+            }
+        });
+
+        // Cancel button
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }
 
-    private boolean validateInput() {
-        // Validate Amount
+    private void saveExpense() {
+        // Get values
         String amountStr = editTextAmount.getText().toString().trim();
+        String description = editTextDescription.getText().toString().trim();
+        String date = editTextDate.getText().toString().trim();
+        String category = spinnerCategory.getSelectedItem().toString();
+        boolean isIncome = radioIncome.isChecked();
+
+        // Validate inputs
         if (amountStr.isEmpty()) {
-            editTextAmount.setError("Amount is required");
-            return false;
+            editTextAmount.setError("Please enter amount");
+            editTextAmount.requestFocus();
+            return;
         }
 
-        double amount;
+        if (description.isEmpty()) {
+            editTextDescription.setError("Please enter description");
+            editTextDescription.requestFocus();
+            return;
+        }
+
+        if (date.isEmpty()) {
+            editTextDate.setError("Please enter date");
+            editTextDate.requestFocus();
+            return;
+        }
+
         try {
-            amount = Double.parseDouble(amountStr);
-            if (amount <= 0) {
-                editTextAmount.setError("Amount must be greater than zero");
-                return false;
+            double amount = Double.parseDouble(amountStr);
+
+            // Make amount negative for expenses, positive for income
+            if (!isIncome) {
+                amount = -Math.abs(amount);
+            } else {
+                amount = Math.abs(amount);
             }
+
+            // Create Expense object
+            Expense expense = new Expense();
+            expense.setUserId(currentUserId);
+            expense.setAmount(amount);
+            expense.setCategory(category);
+            expense.setDescription(description);
+            expense.setDate(date);
+
+            // Save to database
+            long result = databaseHelper.addExpense(expense);
+
+            if (result > 0) {
+                Toast.makeText(this, "Transaction saved successfully!", Toast.LENGTH_SHORT).show();
+                finish(); // Return to dashboard
+            } else {
+                Toast.makeText(this, "Failed to save transaction", Toast.LENGTH_SHORT).show();
+            }
+
         } catch (NumberFormatException e) {
             editTextAmount.setError("Invalid amount");
-            return false;
-        }
-
-        // Validate Description
-        String description = editTextDescription.getText().toString().trim();
-        if (description.isEmpty()) {
-            editTextDescription.setError("Description is required");
-            return false;
-        }
-
-        // Validate Date
-        String dateStr = editTextDate.getText().toString().trim();
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-            dateFormat.parse(dateStr);
-        } catch (ParseException e) {
-            editTextDate.setError("Invalid date format. Use YYYY-MM-DD");
-            return false;
-        }
-
-        return true;
-    }
-
-    private void saveExpense() {
-        // Get input values
-        double amount = Double.parseDouble(editTextAmount.getText().toString());
-        String description = editTextDescription.getText().toString().trim();
-        String dateStr = editTextDate.getText().toString().trim();
-
-        // Determine transaction type (expense or income)
-        int selectedTypeId = radioGroupTransactionType.getCheckedRadioButtonId();
-        if (selectedTypeId == R.id.radio_button_expense) {
-            amount = -Math.abs(amount);  // Expense is negative
-        } else {
-            amount = Math.abs(amount);   // Income is positive
-        }
-
-        // Get current timestamp
-        long timestamp = System.currentTimeMillis();
-
-        // Create Expense object with timestamp
-        Expense expense = new Expense(currentUserId, amount, "General", description, dateStr, timestamp);
-
-        // Save to database
-        long result = databaseHelper.addExpense(expense);
-
-        if (result != -1) {
-            Toast.makeText(this, "Transaction added successfully", Toast.LENGTH_SHORT).show();
-            finish(); // Close activity and return to dashboard
-        } else {
-            Toast.makeText(this, "Failed to add transaction", Toast.LENGTH_SHORT).show();
+            editTextAmount.requestFocus();
         }
     }
-
 }
