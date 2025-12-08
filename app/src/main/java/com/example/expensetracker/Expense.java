@@ -6,35 +6,89 @@ public class Expense {
     private double amount;
     private String category;
     private String description;
-    private long timestamp; // Timestamp is now long
     private String date;
 
-    // Updated constructor to include timestamp as long
-    public Expense(int userId, double amount, String category, String description, String date, long timestamp) {
-        this.userId = userId;
-        this.amount = amount;
-        this.category = category;
-        this.description = description;
-        this.date = date;
-        this.timestamp = timestamp;
+    // Constructors
+    public Expense() {
     }
 
-    // Constructor for getting all expenses from database
-    public Expense(int id, int userId, double amount, String category, String description, long timestamp) {
+    public Expense(int id, int userId, double amount, String category, String description, String date) {
         this.id = id;
         this.userId = userId;
         this.amount = amount;
         this.category = category;
         this.description = description;
-        this.timestamp = timestamp;
+        this.date = date;
     }
 
-    // Getters and setters
-    public int getId() { return id; }
-    public int getUserId() { return userId; }
-    public double getAmount() { return amount; }
-    public String getCategory() { return category; }
-    public String getDescription() { return description; }
-    public String getDate() { return date; }
-    public long getTimestamp() { return timestamp; }
+    // Getters and Setters
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    // Helper method to check if it's income or expense
+    public boolean isIncome() {
+        return amount > 0;
+    }
+
+    // Helper method to get absolute amount
+    public double getAbsoluteAmount() {
+        return Math.abs(amount);
+    }
+
+    @Override
+    public String toString() {
+        return "Expense{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", amount=" + amount +
+                ", category='" + category + '\'' +
+                ", description='" + description + '\'' +
+                ", date='" + date + '\'' +
+                '}';
+    }
 }
