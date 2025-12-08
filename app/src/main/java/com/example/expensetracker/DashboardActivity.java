@@ -27,14 +27,8 @@ public class DashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        // Get User ID from Intent
-        currentUserId = getIntent().getIntExtra("USER_ID", -1);
-        if (currentUserId == -1) {
-            // Redirect to login if no user ID
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-            return;
-        }
+        // Get User ID from Intent, default to 1 if not provided
+        currentUserId = getIntent().getIntExtra("USER_ID", 1);
 
         // Initialize DatabaseHelper
         databaseHelper = new DatabaseHelper(this);
@@ -103,7 +97,7 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners() {
-         //Add Expense;
+        //Add Expense;
         cardViewAddExpense.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,7 +118,7 @@ public class DashboardActivity extends AppCompatActivity {
 //        });
 
         // Reports
-//        cardViewReports.setOnClickListener(new View.OnClickListener() {
+//        cardViewReports.setOnClickListener() {
 //            @Override
 //            public void onClick(View v) {
 //                Intent reportsIntent = new Intent(DashboardActivity.this, ReportsActivity.class);
@@ -142,18 +136,6 @@ public class DashboardActivity extends AppCompatActivity {
 //                startActivity(settingsIntent);
 //            }
 //        });
-
-        // Logout
-        buttonLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Redirect to Login Screen
-                Intent loginIntent = new Intent(DashboardActivity.this, LoginActivity.class);
-                loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(loginIntent);
-                finish();
-            }
-        });
     }
 
     @Override
