@@ -28,7 +28,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 // Move to Login Activity
-                Intent mainIntent = new Intent(SplashActivity.this, LoginActivity.class);
+                Intent mainIntent = new Intent(SplashActivity.this, DashboardActivity.class);
                 startActivity(mainIntent);
                 finish(); // Close splash activity
             }
