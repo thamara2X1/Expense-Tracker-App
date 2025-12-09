@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,7 +17,7 @@ import java.util.List;
 public class ExpenseListActivity extends AppCompatActivity implements ExpenseAdapter.OnExpenseClickListener {
     private RecyclerView recyclerViewExpenses;
     private ExpenseAdapter expenseAdapter;
-    private TextView textViewEmptyState;
+    private LinearLayout layoutEmptyState;
     private ImageButton buttonBack;
     private DatabaseHelper databaseHelper;
     private int currentUserId;
@@ -46,7 +46,7 @@ public class ExpenseListActivity extends AppCompatActivity implements ExpenseAda
 
     private void initializeViews() {
         recyclerViewExpenses = findViewById(R.id.recycler_view_expenses);
-        textViewEmptyState = findViewById(R.id.text_view_empty_state);
+        layoutEmptyState = findViewById(R.id.layout_empty_state);
         buttonBack = findViewById(R.id.button_back);
 
         // Setup RecyclerView
@@ -59,10 +59,10 @@ public class ExpenseListActivity extends AppCompatActivity implements ExpenseAda
 
         if (expenseList.isEmpty()) {
             recyclerViewExpenses.setVisibility(View.GONE);
-            textViewEmptyState.setVisibility(View.VISIBLE);
+            layoutEmptyState.setVisibility(View.VISIBLE);
         } else {
             recyclerViewExpenses.setVisibility(View.VISIBLE);
-            textViewEmptyState.setVisibility(View.GONE);
+            layoutEmptyState.setVisibility(View.GONE);
 
             expenseAdapter = new ExpenseAdapter(this, expenseList, this);
             recyclerViewExpenses.setAdapter(expenseAdapter);
@@ -107,7 +107,7 @@ public class ExpenseListActivity extends AppCompatActivity implements ExpenseAda
                         // Show empty state if list is empty
                         if (expenseList.isEmpty()) {
                             recyclerViewExpenses.setVisibility(View.GONE);
-                            textViewEmptyState.setVisibility(View.VISIBLE);
+                            layoutEmptyState.setVisibility(View.VISIBLE);
                         }
 
                         Toast.makeText(ExpenseListActivity.this, "Transaction deleted", Toast.LENGTH_SHORT).show();
