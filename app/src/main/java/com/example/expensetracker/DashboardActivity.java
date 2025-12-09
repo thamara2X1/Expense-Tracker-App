@@ -118,14 +118,14 @@ public class DashboardActivity extends AppCompatActivity {
         });
 
         // Reports
-//        cardViewReports.setOnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent reportsIntent = new Intent(DashboardActivity.this, ReportsActivity.class);
-//                reportsIntent.putExtra("USER_ID", currentUserId);
-//                startActivity(reportsIntent);
-//            }
-//        });
+        cardViewReports.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent reportsIntent = new Intent(DashboardActivity.this, ReportsActivity.class);
+                reportsIntent.putExtra("USER_ID", currentUserId);
+                startActivity(reportsIntent);
+            }
+        });
 
         // Settings
 //        cardViewSettings.setOnClickListener(new View.OnClickListener() {
