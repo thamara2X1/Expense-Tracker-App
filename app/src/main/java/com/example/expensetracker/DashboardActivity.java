@@ -108,14 +108,14 @@ public class DashboardActivity extends AppCompatActivity {
         });
 
         // Expense List
-//        cardViewExpenseList.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent expenseListIntent = new Intent(DashboardActivity.this, ExpenseListActivity.class);
-//                expenseListIntent.putExtra("USER_ID", currentUserId);
-//                startActivity(expenseListIntent);
-//            }
-//        });
+        cardViewExpenseList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent expenseListIntent = new Intent(DashboardActivity.this, ExpenseListActivity.class);
+                expenseListIntent.putExtra("USER_ID", currentUserId);
+                startActivity(expenseListIntent);
+            }
+        });
 
         // Reports
 //        cardViewReports.setOnClickListener() {
