@@ -128,14 +128,14 @@ public class DashboardActivity extends AppCompatActivity {
         });
 
         // Settings
-//        cardViewSettings.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent settingsIntent = new Intent(DashboardActivity.this, SettingsActivity.class);
-//                settingsIntent.putExtra("USER_ID", currentUserId);
-//                startActivity(settingsIntent);
-//            }
-//        });
+        cardViewSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent settingsIntent = new Intent(DashboardActivity.this, SettingsActivity.class);
+                settingsIntent.putExtra("USER_ID", currentUserId);
+                startActivity(settingsIntent);
+            }
+        });
     }
 
     @Override
