@@ -1,33 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SplashActivity">
+    android:background="@drawable/splash_gradient_bg">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#FFFFFF">
+    <!-- Decorative top-right circle -->
+    <View
+        android:id="@+id/circle_top_right"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
+        android:background="@drawable/splash_circle_light"
+        android:alpha="0.15"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="-60dp"
+        android:layout_marginEnd="-60dp"/>
 
-<!--        <ImageView-->
-<!--            android:id="@+id/splash_logo"-->
-<!--            android:layout_width="200dp"-->
-<!--            android:layout_height="200dp"-->
-<!--            android:src="@drawable/app_logo"-->
-<!--            android:layout_centerInParent="true"/>-->
+    <!-- Decorative bottom-left circle -->
+    <View
+        android:id="@+id/circle_bottom_left"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:background="@drawable/splash_circle_light"
+        android:alpha="0.1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="-50dp"
+        android:layout_marginStart="-50dp"/>
 
-<!--        <TextView-->
-<!--            android:id="@+id/splash_title"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Expense Tracker"-->
-<!--            android:textSize="24sp"-->
-<!--            android:textColor="#2196F3"-->
-<!--            android:layout_below="@id/splash_logo"-->
-<!--            android:layout_centerHorizontal="true"-->
-<!--            android:layout_marginTop="16dp"/>-->
-    </RelativeLayout>
+    <!-- Center Content Group -->
+    <LinearLayout
+        android:id="@+id/layout_center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- App Icon Container -->
+        <FrameLayout
+            android:id="@+id/icon_container"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:background="@drawable/splash_icon_bg">
+
+            <ImageView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_gravity="center"
+                android:src="@android:drawable/ic_menu_my_calendar"
+                app:tint="#FFFFFF"/>
+
+        </FrameLayout>
+
+        <!-- App Name -->
+        <TextView
+            android:id="@+id/text_app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ExpenseTrack"
+            android:textColor="#FFFFFF"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.05"
+            android:layout_marginTop="24dp"/>
+
+        <!-- Tagline -->
+        <TextView
+            android:id="@+id/text_tagline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Smart money, smarter life"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:alpha="0.8"
+            android:letterSpacing="0.03"
+            android:layout_marginTop="8dp"/>
+
+    </LinearLayout>
+
+    <!-- Loading Dots at Bottom -->
+    <LinearLayout
+        android:id="@+id/loading_dots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="80dp">
+
+        <View
+            android:id="@+id/dot1"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@drawable/splash_dot"
+            android:layout_marginEnd="8dp"/>
+
+        <View
+            android:id="@+id/dot2"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@drawable/splash_dot"
+            android:alpha="0.5"
+            android:layout_marginEnd="8dp"/>
+
+        <View
+            android:id="@+id/dot3"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@drawable/splash_dot"
+            android:alpha="0.3"/>
+
+    </LinearLayout>
+
+    <!-- Version Text -->
+    <TextView
+        android:id="@+id/text_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="v1.0.0"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:alpha="0.5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="24dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
